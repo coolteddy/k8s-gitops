@@ -1,0 +1,17 @@
+# Secrets — never commit these
+*.secret.yaml
+*.secret.yml
+secrets/
+*-secret.yaml
+*-secret.yml
+
+# Helm
+charts/
+*.tgz
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
