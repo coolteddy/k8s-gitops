@@ -145,3 +145,43 @@ kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 909
 # Dashboards > Browse > Kubernetes / Pods — pod-level metrics
 # Explore > Prometheus > run query: up
 ```
+
+---
+
+### Loki + Fluent Bit
+
+- Chart: `grafana/loki` 6.55.0 (Loki 3.6.7) — values: `logging/loki/values.yaml`
+- Chart: `fluent/fluent-bit` 0.57.3 — values: `logging/fluent-bit/values.yaml`
+
+Note: `loki-stack` (deprecated) bundles Loki 2.6.1 which is incompatible with Grafana 11.x. Use standalone charts above.
+
+Deploy via ArgoCD (push to Git first):
+```bash
+git add logging/ argocd/apps/logging.yaml argocd/apps/fluent-bit.yaml
+git commit -m "Add Loki and Fluent Bit"
+git push
+kubectl apply -f argocd/apps/logging.yaml -f argocd/apps/fluent-bit.yaml
+argocd app sync loki && argocd app sync fluent-bit
+```
+
+Add Loki datasource in Grafana:
+- Connections > Data sources > Add > Loki
+- URL: `http://loki.logging.svc.cluster.local:3100`
+- Save & test — should show green
+
+### Loki + Fluent Bit Verify
+
+```bash
+# All pods running
+kubectl get pods -n logging
+# Expected: loki-0 (2/2), fluent-bit-* (1/1) per node
+
+# Confirm Loki has labels
+kubectl exec -n monitoring deployment/monitoring-grafana -c grafana -- \
+  wget -qO- "http://loki.logging.svc.cluster.local:3100/loki/api/v1/labels"
+
+# In Grafana Explore > Loki:
+# Label filter: job = fluent-bit → Run query → logs visible
+```
+
+Known gap: namespace label not yet exposed — fix pending in Fluent Bit output config.
