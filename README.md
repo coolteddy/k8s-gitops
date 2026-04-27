@@ -116,12 +116,12 @@ kubectl get svc -n monitoring | grep grafana
 
 **Local machine** (same network as cluster) — open directly:
 ```
-http://10.124.224.145:<nodeport>
+http://10.124.224.145:31689
 ```
 
 **Remote machine** (SSH tunnel) — run on remote machine, then open browser:
 ```bash
-ssh -L 3000:10.124.224.145:<nodeport> dell
+ssh -L 3000:10.124.224.145:31689 dell
 # Open: http://localhost:3000
 ```
 
@@ -141,6 +141,7 @@ kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 909
 # Open: http://localhost:9090/targets — all targets should be UP
 
 # In Grafana:
-# Dashboards > Browse — pre-built cluster dashboards available
+# Dashboards > Browse > Node Exporter / Nodes — live CPU, RAM, disk per node
+# Dashboards > Browse > Kubernetes / Pods — pod-level metrics
 # Explore > Prometheus > run query: up
 ```
