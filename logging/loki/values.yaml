@@ -1,0 +1,43 @@
+loki:
+  auth_enabled: false
+
+  commonConfig:
+    replication_factor: 1
+
+  storage:
+    type: filesystem
+
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+
+# No persistent storage — logs stored in emptyDir
+persistence:
+  enabled: false
+
+# Fluent Bit ships logs to Loki
+fluent-bit:
+  enabled: true
+
+# Grafana datasource auto-configuration disabled — Grafana runs in separate namespace
+grafana-agent:
+  enabled: false
+
+# Minimal components — no distributed mode needed
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
