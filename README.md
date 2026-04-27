@@ -100,9 +100,13 @@ kubectl get pods -n sample-app -w
 Chart: kube-prometheus-stack v70.4.2
 Values: `monitoring/prometheus/values.yaml`
 
-Deploy via ArgoCD:
+Deploy via ArgoCD (push to Git first — ArgoCD reads values.yaml from the repo):
 ```bash
+git add monitoring/prometheus/values.yaml argocd/apps/monitoring.yaml
+git commit -m "Add kube-prometheus-stack"
+git push
 kubectl apply -f argocd/apps/monitoring.yaml
+argocd app sync monitoring
 ```
 
 Get Grafana NodePort:
