@@ -63,3 +63,32 @@ Initial admin password:
 kubectl get secret argocd-initial-admin-secret -n argocd \
   -o jsonpath="{.data.password}" | base64 -d && echo
 ```
+
+Connect repo and deploy sample app:
+```bash
+argocd login <node-ip>:<nodeport> --username admin --password <password> --insecure
+argocd repo add https://github.com/coolteddy/k8s-gitops.git
+kubectl apply -f argocd/apps/sample-app.yaml
+```
+
+### ArgoCD Verify
+
+```bash
+# All 7 ArgoCD pods running
+kubectl get pods -n argocd
+
+# Sample app deployed by ArgoCD
+kubectl get pods -n sample-app
+
+# App sync status
+argocd app get sample-app
+
+# GitOps loop test — change replicas in apps/sample-app/deployment.yaml, push, then:
+argocd app sync sample-app
+kubectl get pods -n sample-app -w
+
+# Revert test
+git revert HEAD --no-edit && git push
+argocd app sync sample-app
+kubectl get pods -n sample-app -w
+```
