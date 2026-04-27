@@ -1,0 +1,21 @@
+grafana:
+  adminPassword: "gitops1234"
+
+  service:
+    type: NodePort
+
+  # Persist dashboards and datasources via ConfigMaps — no database needed
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+alertmanager:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    # No PersistentVolume — stores metrics in emptyDir (lost on pod restart, fine for this cluster)
+    storageSpec: {}

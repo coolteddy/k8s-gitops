@@ -92,3 +92,51 @@ git revert HEAD --no-edit && git push
 argocd app sync sample-app
 kubectl get pods -n sample-app -w
 ```
+
+---
+
+### Prometheus + Grafana
+
+Chart: kube-prometheus-stack v70.4.2
+Values: `monitoring/prometheus/values.yaml`
+
+Deploy via ArgoCD:
+```bash
+kubectl apply -f argocd/apps/monitoring.yaml
+```
+
+Get Grafana NodePort:
+```bash
+kubectl get svc -n monitoring | grep grafana
+```
+
+**Local machine** (same network as cluster) — open directly:
+```
+http://10.124.224.145:<nodeport>
+```
+
+**Remote machine** (SSH tunnel) — run on remote machine, then open browser:
+```bash
+ssh -L 3000:10.124.224.145:<nodeport> dell
+# Open: http://localhost:3000
+```
+
+Login: `admin / gitops1234`
+
+### Prometheus + Grafana Verify
+
+```bash
+# All pods running
+kubectl get pods -n monitoring
+
+# Grafana and Prometheus services with NodePorts
+kubectl get svc -n monitoring
+
+# Check Prometheus targets (port-forward Prometheus UI)
+kubectl port-forward svc/monitoring-kube-prometheus-prometheus -n monitoring 9090:9090
+# Open: http://localhost:9090/targets — all targets should be UP
+
+# In Grafana:
+# Dashboards > Browse — pre-built cluster dashboards available
+# Explore > Prometheus > run query: up
+```
