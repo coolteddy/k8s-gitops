@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki
+  name: fluent-bit
   namespace: argocd
 spec:
   project: default
   sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: loki
-      targetRevision: 6.55.0
+    - repoURL: https://fluent.github.io/helm-charts
+      chart: fluent-bit
+      targetRevision: 0.57.3
       helm:
         valueFiles:
-          - $values/logging/loki/values.yaml
+          - $values/logging/fluent-bit/values.yaml
     - repoURL: https://github.com/coolteddy/k8s-gitops.git
       targetRevision: main
       ref: values
