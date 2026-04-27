@@ -18,8 +18,9 @@ loki:
 
 singleBinary:
   replicas: 1
+  persistence:
+    enabled: false
 
-# Disable distributed components — not needed for single binary
 backend:
   replicas: 0
 read:
@@ -27,7 +28,6 @@ read:
 write:
   replicas: 0
 
-# No object storage, no gateway, no extras
 minio:
   enabled: false
 gateway:
@@ -35,4 +35,8 @@ gateway:
 lokiCanary:
   enabled: false
 test:
+  enabled: false
+chunksCache:
+  enabled: false
+resultsCache:
   enabled: false
