@@ -15,3 +15,6 @@ charts/
 # Editor
 .vscode/
 *.swp
+
+# Claude Code local assistant instructions — not for the repo
+CLAUDE.md
