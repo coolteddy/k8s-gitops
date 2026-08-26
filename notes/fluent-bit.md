@@ -1,5 +1,18 @@
 # Fluent Bit
 
+```
+container stdout/stderr  →  node log file  →  tail input  →  kubernetes filter enriches  →  shipped to Loki
+```
+
+```mermaid
+flowchart LR
+    A[container stdout/stderr] --> B[node log file /var/log/containers]
+    B --> C[tail input]
+    C --> D[kubernetes filter enriches with pod metadata]
+    D --> E[loki output]
+    E --> F[shipped to Loki]
+```
+
 ## What It Is
 
 Fluent Bit is a lightweight log processor and forwarder. It runs as a

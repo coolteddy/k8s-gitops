@@ -1,5 +1,18 @@
 # Loki
 
+```
+log line from Fluent Bit  →  distributor routes by labels  →  ingester buffers  →  flushed as chunks + index  →  queried via LogQL
+```
+
+```mermaid
+flowchart LR
+    A[log line from Fluent Bit] --> B[distributor routes by labels]
+    B --> C[ingester buffers in memory]
+    C --> D[flushed as compressed chunks + index]
+    D --> E[LogQL query]
+    E --> F[visualized in Grafana]
+```
+
 ## What It Is
 
 Loki is Grafana's log aggregation system. Unlike most log databases, it

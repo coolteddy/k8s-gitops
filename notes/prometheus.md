@@ -1,5 +1,18 @@
 # Prometheus + Grafana (kube-prometheus-stack)
 
+```
+app exposes /metrics  →  Prometheus scrapes on interval  →  stored in local TSDB  →  queried via Grafana
+```
+
+```mermaid
+flowchart LR
+    A[App exposes /metrics] --> B[ServiceMonitor tells Operator where to scrape]
+    B --> C[Prometheus scrapes on interval]
+    C --> D[stored in local TSDB]
+    D --> E[PromQL query]
+    E --> F[visualized in Grafana]
+```
+
 ## What It Is
 
 `kube-prometheus-stack` is a Helm chart that bundles the **Prometheus

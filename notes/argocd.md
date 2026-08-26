@@ -1,5 +1,19 @@
 # ArgoCD
 
+```
+git commit + push  →  ArgoCD detects change  →  diff vs live cluster  →  sync (apply)
+```
+
+```mermaid
+flowchart LR
+    A[git commit + push] --> B[ArgoCD detects change]
+    B --> C[diff vs live cluster state]
+    C --> D[sync / apply]
+    D --> E[cluster matches Git]
+    E -. manual kubectl edit .-> F[selfHeal reverts drift]
+    F --> C
+```
+
 ## What It Is
 
 ArgoCD is a GitOps continuous delivery controller for Kubernetes. It runs
